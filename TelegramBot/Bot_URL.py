@@ -11,6 +11,10 @@ def get_message_text(update):
     message_text = update["message"]["text"]
     return message_text
 
+def get_first_name(update):
+    first_name = update["message"]["chat"]["username"]
+    return first_name
+
 def last_update(req):
     response = requests.get(req + "getUpdates")
     response = response.json()
@@ -28,14 +32,14 @@ def main():
     while True:
         update = last_update(url)
         if update_id == update["update_id"]:
-            if get_message_text(update).lower() == "hola" or get_message_text(update).lower() == "hey":
-                send_message(get_chat_id(update), 'Hola Bienvenido a nuestro bot. Escribe "play" para contar datos.')
+            if get_message_text(update).lower() == "hola" or get_message_text(update).lower() == "/start":
+                send_message(get_chat_id(update), 'Hola Bienvenid@ ' + '"' + get_first_name(update) + '"' + ', a nuestro bot. Escribe "play" para jugar a contar datos.')
             elif get_message_text(update).lower() == "play":
                 _1 = random.randint(1, 6)
                 _2 = random.randint(1, 6)
                 _3 = random.randint(1, 6)
                 send_message(get_chat_id(update), 'Tu tienes ' + str(_1) + ' + ' + str(_2) + ' + ' + str(_3) + '!\n Tu resultado es ' + str(_1 + _2 + _3) + '!!!')
             else:
-                send_message(get_chat_id(update), "Lo siento No Entiendo lo que has escrito :V")
+                send_message(get_chat_id(update), '¿Porque eres así?, Solo escribe la palabra "play" :V')
             update_id += 1
 main()
